@@ -1,0 +1,14 @@
+@host = http://localhost:4444/signup
+
+###
+GET {{host}}/
+
+###
+POST {{host}}/
+Content-Type: application/json
+
+{
+	"username":"fazt",
+	"email":"fazt@faztweb.com",
+	"password":"12345"
+}

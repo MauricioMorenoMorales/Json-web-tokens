@@ -1,0 +1,7 @@
+@host = http://localhost:4444/signin
+
+###
+GET {{host}}
+
+###
+POST {{host}}
