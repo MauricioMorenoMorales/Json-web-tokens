@@ -5,3 +5,9 @@ GET {{host}}/
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMTVlZDg2MjRiM2JlNjYyZjZkMmNkMCIsImlhdCI6MTYxMjA0OTc5OSwiZXhwIjoxNjEyMTM2MTk5fQ.sOKkISGBhMmrIR4d7cGkrYTNW8fhHym_7TkcjIoLzg8
 
 Content-Type: application/json
+
+{
+	"username":"cameron",
+	"email":"cameron@faztweb.com",
+	"password":"12345"
+}
