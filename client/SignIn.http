@@ -5,3 +5,9 @@ GET {{host}}
 
 ###
 POST {{host}}
+Content-Type: application/json
+
+{
+	"email":"cameron@faztweb.com",
+	"password":"12345"
+}

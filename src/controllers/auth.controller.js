@@ -1,8 +1,10 @@
 const { Router } = require('express')
 const router = Router()
+const jwt = require('jsonwebtoken')
 
 const User = require('../models/User.model')
 
+//!||
 router.post('/signup', async (req, res, next) => {
 	const { username, email, password } = req.body
 	const user = await User.create({
@@ -14,16 +16,40 @@ router.post('/signup', async (req, res, next) => {
 	//! La encriptacion se hace desde la instancia no desde el modelo
 	user.password = await user.encryptPassword(user.password)
 	await user.save()
-	res.json({ message: 'The user has been saved' })
+	const token = jwt.sign({ id: user._id }, process.env.SECRET, {
+		expiresIn: 60 * 60 * 24,
+	})
+	res.json({ message: 'The user has been saved', auth: true, token: token })
 	console.log(user)
 })
 
-router.post('/signin', (req, res, next) => {
-	res.json('signin')
+//!||
+router.get('/me', async (req, res, next) => {
+	try {
+		const token = req.headers['x-access-token']
+		if (!token) {
+			return res.status(401).json({
+				auth: false,
+				message: 'No token provided',
+			})
+		}
+		const decoded = jwt.verify(token, process.env.SECRET)
+		const user = await User.findById(decoded.id, { password: 0 })
+		if (!user) return res.status(404).send('No user found')
+		console.log(user)
+		res.json(user)
+	} catch (err) {
+		console.error(`[Auth controller]: Error ${err}`)
+	}
 })
 
-router.get('/me', (req, res, next) => {
-	res.json('me')
+//!||
+router.post('/signin', async (req, res, next) => {
+	const { email, password } = req.body
+	const user = await User.findOne({ email })
+	if (!user) return res.status(404).send('The email does not exist')
+	const passwordIsValid = await user.validatePassword(password)
+	res.json('signin')
 })
 
 module.exports = router
